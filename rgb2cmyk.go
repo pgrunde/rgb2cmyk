@@ -33,7 +33,12 @@ func createColorConverter(inputRgb chan rgb) chan cmyk {
 			r := float64(rgb.R) / 255.0
 			g := float64(rgb.G) / 255.0
 			b := float64(rgb.B) / 255.0
+
 			k := maxOfThree(r, g, b)
+			c := (1 - r - k) / (1 - k)
+			m := (1 - g - k) / (1 - k)
+			y := (1 - b - k) / (1 - l)
+			outputCmyk <- cmyk{C: c, M: m, Y: y, K: k}
 		}
 	}()
 	return outputCmyk
