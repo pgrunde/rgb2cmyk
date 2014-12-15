@@ -10,4 +10,8 @@ The application we will be writing takes in [RGB](http://en.wikipedia.org/wiki/R
 
 We will need a prompt so the user knows what the heck this program is for, and we'll need a result string which contains the output of our CMYK channel.
 
-`const result = "RGB R%v G%v B%v == C:%.03f M:%.03f Y:%03f K:%.03f\n"` 
+```
+const result = "RGB: R%v G%v B%v == C:%.03f M:%.03f Y:%03f K:%.03f\n"
+
+var prompt = "Enter RGB, e.g., 12 233 180"
+```
