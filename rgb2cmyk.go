@@ -1,5 +1,11 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
 const result = "RGB: R%v G%v B%v == CMYK: %v%v%v%v\n"
 
 var prompt = "Enter RGB, e.g., 12 233 180"
@@ -42,6 +48,27 @@ func createColorConverter(inputRgb chan rgb) chan cmyk {
 		}
 	}()
 	return outputCmyk
+}
+
+func receive(input chan rgb, output chan cmyk) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println(prompt)
+	for {
+		fmt.Printf("R G B: ")
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		var r, g, b uint8
+		if _, err := fmt.Sscanf(line, "%v %v %v", &r, &g, &b); err != nil {
+			fmt.Fprintln(os.Stderr, "invalid input")
+			continue
+		}
+		input <- rgb{r, g, b}
+		printColors := <-output
+		fmt.Printf(result, r, g, b, printColors.C, printColors.M, printColors.Y, printColors.K)
+	}
+	fmt.Println()
 }
 
 func maxOfThree(x, y, z float64) float64 {
