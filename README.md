@@ -26,4 +26,25 @@ const result = "RGB: R%v G%v B%v == C:%.03f M:%.03f Y:%03f K:%.03f\n"
 var prompt = "Enter RGB, e.g., 12 233 180"
 ```
 
-The `result` string contains %v and %.03f, both which are explained in the [fmt package overview](http://golang.org/pkg/fmt/). Eventually we'll be printing our final values into this string. The prompt... I feel is self evident, but it prompts the user for input.
+The `result` string contains %v and %.03f, both which are explained in the [fmt package overview](http://golang.org/pkg/fmt/). Eventually we'll be printing our final values into this string with the %v receiving RGB values and the %.03f receiving CMYK values (the .03 means we're rounding to the thousandths place). The prompt... I feel is self evident, but it prompts the user for input.
+
+### The structs
+
+You can pass any type into a channel, but today we'll be passing in our structs. They will contain details for our RGB values and the converted CMYK values.
+
+```
+type rgb struct {
+	R uint8
+	G uint8
+	B uint8
+}
+
+type cmyk struct {
+	C float64
+	M float64
+	Y float64
+	K float64
+}
+```
+
+Our rgb struct contains three [uint8](https://golang.org/ref/spec#Numeric_types) which we use since each RGB color is reprsented by a 0 to 255 value. CMYK values are precentages, so a float64 value ranging from 0 to 1 is what we need.
