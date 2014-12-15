@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-const result = "RGB: R%v G%v B%v == CMYK: %v%v%v%v\n"
+const result = "RGB: R%v G%v B%v == C:%.03f M:%.03f Y:%.03f K:%.03f\n"
 
 var prompt = "Enter RGB, e.g., 12 233 180"
 
@@ -40,10 +40,10 @@ func createColorConverter(inputRgb chan rgb) chan cmyk {
 			g := float64(rgb.G) / 255.0
 			b := float64(rgb.B) / 255.0
 
-			k := maxOfThree(r, g, b)
+			k := 1 - maxOfThree(r, g, b)
 			c := (1 - r - k) / (1 - k)
 			m := (1 - g - k) / (1 - k)
-			y := (1 - b - k) / (1 - l)
+			y := (1 - b - k) / (1 - k)
 			outputCmyk <- cmyk{C: c, M: m, Y: y, K: k}
 		}
 	}()
